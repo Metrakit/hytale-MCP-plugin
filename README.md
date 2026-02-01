@@ -5,7 +5,7 @@
 Connect AI assistants like OpenCode, Claude, ChatGPT, and Gemini directly to your Hytale server
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/Top-Serveurs/hytale-mcp/releases)
+[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/Metrakit/hytale-MCP-plugin/releases)
 [![Java](https://img.shields.io/badge/java-25-orange.svg)](https://www.oracle.com/java/)
 [![MCP](https://img.shields.io/badge/MCP-Protocol-purple.svg)](https://modelcontextprotocol.io)
 
@@ -70,7 +70,7 @@ Whether you're a server administrator, builder, or developer, Hytale MCP provide
 
 ### Quick Start
 
-1. **Download** the latest `MCP-1.*.*.jar` from the [releases page](https://github.com/Top-Serveurs/hytale-mcp/releases)
+1. **Download** the latest `MCP-1.*.*.jar` from the [releases page](https://github.com/Metrakit/hytale-MCP-plugin/releases)
 2. **Install** the [Nitrado WebServer plugin](https://github.com/nitrado/hytale-plugin-webserver) (required dependency)
 3. **Place** both JAR files in your server's `mods/` directory
 4. **Start** your server to generate the default configuration
@@ -703,7 +703,7 @@ We welcome contributions from the community! Here's how you can help:
 
 ### Reporting Issues
 
-- Use the [GitHub issue tracker](https://github.com/Top-Serveurs/hytale-mcp/issues)
+- Use the [GitHub issue tracker](https://github.com/Metrakit/hytale-MCP-plugin/issues)
 - Check if the issue already exists before creating a new one
 - Include detailed information: server version, plugin version, error logs
 
@@ -727,7 +727,7 @@ Copyright (c) 2026 Top-Games
 
 ### Getting Help
 
-- **Issues & Bugs**: [GitHub Issues](https://github.com/Top-Serveurs/hytale-mcp/issues)
+- **Issues & Bugs**: [GitHub Issues](https://github.com/Metrakit/hytale-MCP-plugin/issues)
 
 ### Useful Links
 
