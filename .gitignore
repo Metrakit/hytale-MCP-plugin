@@ -1,0 +1,12 @@
+lib/
+bin/
+target/
+*.iml
+.vscode/
+.DS_Store
+.classpath
+.settings/
+.metadata/
+.recommenders/
+.factorypath
+.idea/

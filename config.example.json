@@ -1,0 +1,45 @@
+{
+  "auth": {
+    "enabled": true,
+    "adminTokens": [
+      "your-admin-token-here"
+    ],
+    "playerTokens": [
+      "your-player-token-here"
+    ]
+  },
+  "features": {
+    "players": {
+      "listPlayers": true,
+      "getServerInfo": true,
+      "executeCommand": false,
+      "getServerStats": true,
+      "broadcastMessage": false,
+      "setBlock": false,
+      "setBlocksBatch": false,
+      "getBlockTypes": true,
+      "getPlayerPosition": true,
+      "getWorldInfo": true,
+      "sendChatMessage": true,
+      "kickPlayer": false,
+      "getPlayerInventory": false,
+      "getLogs": false
+    },
+    "admins": {
+      "listPlayers": true,
+      "getServerInfo": true,
+      "executeCommand": true,
+      "getServerStats": true,
+      "broadcastMessage": true,
+      "setBlock": true,
+      "setBlocksBatch": true,
+      "getBlockTypes": true,
+      "getPlayerPosition": true,
+      "getWorldInfo": true,
+      "sendChatMessage": true,
+      "kickPlayer": true,
+      "getPlayerInventory": true,
+      "getLogs": true
+    }
+  }
+}
