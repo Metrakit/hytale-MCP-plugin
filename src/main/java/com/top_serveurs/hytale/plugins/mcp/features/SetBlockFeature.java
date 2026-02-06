@@ -34,7 +34,7 @@ public class SetBlockFeature implements McpFeature {
     public McpTool getToolDefinition() {
         return new McpTool(
                 "set_block",
-                "Sets a block at specified world coordinates. Requires admin permissions.",
+                "Sets a block at specified world coordinates. ",
                 "function"
         );
     }

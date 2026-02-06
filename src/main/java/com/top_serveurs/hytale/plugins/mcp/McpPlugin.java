@@ -80,11 +80,14 @@ public class McpPlugin extends JavaPlugin {
 
         featureRegistry.registerFeature(new ListPlayersFeature(logger));
         featureRegistry.registerFeature(new GetPlayerPositionFeature(logger));
-        featureRegistry.registerFeature(new GetBlockTypesFeature(logger));
+        featureRegistry.registerFeature(new ListBlocksFeature(logger));
         featureRegistry.registerFeature(new ExecuteCommandFeature(logger, config));
+        featureRegistry.registerFeature(new GiveItemFeature(logger, config));
         featureRegistry.registerFeature(new BroadcastMessageFeature(logger, config));
         featureRegistry.registerFeature(new SetBlockFeature(logger));
-        featureRegistry.registerFeature(new SetBlocksBatchFeature(logger));
+        featureRegistry.registerFeature(new SetBlocksBatchFeature(logger, config));
+        featureRegistry.registerFeature(new FlattenTerrainFeature(logger, config));
+        featureRegistry.registerFeature(new GetBuildingGuideFeature(logger, config));
         featureRegistry.registerFeature(new GetWorldInfoFeature(logger));
         featureRegistry.registerFeature(new GetServerInfoFeature(logger, config, getIdentifier()));
         featureRegistry.registerFeature(new SendChatMessageFeature(logger));

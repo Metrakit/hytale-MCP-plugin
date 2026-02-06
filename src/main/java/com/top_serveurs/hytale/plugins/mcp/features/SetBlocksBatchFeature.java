@@ -22,11 +22,12 @@ import java.util.concurrent.CompletableFuture;
 public class SetBlocksBatchFeature implements McpFeature {
 
     private static final Gson GSON = new Gson();
-    private static final int MAX_BLOCKS = 100;
     private final HytaleLogger logger;
+    private final McpConfig config;
 
-    public SetBlocksBatchFeature(HytaleLogger logger) {
+    public SetBlocksBatchFeature(HytaleLogger logger, McpConfig config) {
         this.logger = logger;
+        this.config = config;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class SetBlocksBatchFeature implements McpFeature {
     public McpTool getToolDefinition() {
         return new McpTool(
                 "set_blocks_batch",
-                "Sets multiple blocks at specified world coordinates (max 100 blocks per request). Requires admin permissions.",
+                "Places up to " + config.getFeatures().getMaxBlocksBatch() + " blocks in one call. IMPORTANT: call get_building_guide first — it contains block names, coordinate rules, support/gravity constraints, and blueprints. ",
                 "function"
         );
     }
@@ -59,7 +60,7 @@ public class SetBlocksBatchFeature implements McpFeature {
         return McpToolSchema.schemaWithProperties(
             java.util.Map.of(
                 "world", McpToolSchema.stringProperty("World UUID"),
-                "blocks", McpToolSchema.arrayProperty(blockSchema, "List of blocks to place (max 100)")
+                "blocks", McpToolSchema.arrayProperty(blockSchema, "List of blocks to place (max " + config.getFeatures().getMaxBlocksBatch() + ")")
             ),
             java.util.List.of("world", "blocks")
         );
@@ -101,8 +102,9 @@ public class SetBlocksBatchFeature implements McpFeature {
             return McpToolResponse.error("blocks array cannot be empty");
         }
 
-        if (blocks.size() > MAX_BLOCKS) {
-            return McpToolResponse.error("Maximum " + MAX_BLOCKS + " blocks per request");
+        int maxBlocks = config.getFeatures().getMaxBlocksBatch();
+        if (blocks.size() > maxBlocks) {
+            return McpToolResponse.error("Maximum " + maxBlocks + " blocks per request");
         }
 
         UUID worldUuid;

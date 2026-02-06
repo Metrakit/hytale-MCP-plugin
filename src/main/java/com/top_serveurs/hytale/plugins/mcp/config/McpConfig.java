@@ -140,6 +140,7 @@ public class McpConfig {
     public static class FeaturesConfig {
         private FeaturePermissions players = new FeaturePermissions();
         private FeaturePermissions admins = new FeaturePermissions();
+        private int maxBlocksBatch = 1000;
 
         public FeaturePermissions getPlayers() {
             return players;
@@ -156,6 +157,14 @@ public class McpConfig {
         public void setAdmins(FeaturePermissions admins) {
             this.admins = admins;
         }
+
+        public int getMaxBlocksBatch() {
+            return maxBlocksBatch;
+        }
+
+        public void setMaxBlocksBatch(int maxBlocksBatch) {
+            this.maxBlocksBatch = maxBlocksBatch;
+        }
     }
 
     public static class FeaturePermissions {
@@ -169,6 +178,7 @@ public class McpConfig {
         private boolean getBlockTypes = false;
         private boolean getWorldInfo = false;
         private boolean getServerInfo = false;
+        private boolean listBlocks = false;
 
         public boolean canListPlayers() {
             return listPlayers;
@@ -248,6 +258,14 @@ public class McpConfig {
 
         public void setGetServerInfo(boolean getServerInfo) {
             this.getServerInfo = getServerInfo;
+        }
+
+        public boolean canListBlocks() {
+            return listBlocks;
+        }
+
+        public void setListBlocks(boolean listBlocks) {
+            this.listBlocks = listBlocks;
         }
     }
 }
