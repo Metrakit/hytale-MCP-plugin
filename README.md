@@ -57,6 +57,9 @@ Whether you're a server administrator, builder, or developer, Hytale MCP provide
 ### Built-in Tools
 
 - **World Building** - Construct anything with natural language prompts using batch block placement
+- **Terrain Editing** - Flatten rectangular areas for building foundations
+- **Item Management** - Give items to players with smart item search
+- **Block Discovery** - Search and categorize all available blocks
 - **Player Management** - List players, get positions, manage inventories, send messages
 - **Server Administration** - Execute commands, broadcast messages, kick players
 - **Information Retrieval** - Access server stats, world info, block types, and player data
@@ -125,6 +128,7 @@ After the first run, a configuration file will be created at `mods/MCP/config.js
       "getLogs": false,
       "sendChatMessage": false,
       "getBlockTypes": false,
+      "listBlocks": false,
       "getWorldInfo": false,
       "getServerInfo": false
     },
@@ -137,9 +141,11 @@ After the first run, a configuration file will be created at `mods/MCP/config.js
       "getLogs": true,
       "sendChatMessage": true,
       "getBlockTypes": true,
+      "listBlocks": true,
       "getWorldInfo": true,
       "getServerInfo": true
-    }
+    },
+    "maxBlocksBatch": 1000
   }
 }
 ```
@@ -160,21 +166,22 @@ After the first run, a configuration file will be created at `mods/MCP/config.js
 
 Configure feature availability for each permission level:
 
-| Feature | Description |
-|---------|-------------|
-| `listPlayers` | List all connected players |
-| `getServerInfo` | Get server information and status |
-| `executeCommand` | Execute server commands |
-| `broadcastMessage` | Send messages to all players |
-| `getLogs` | Retrieve and filter server logs |
-| `setBlock` | Place individual blocks at coordinates |
-| `setBlocksBatch` | Place multiple blocks in a single operation (max 100) |
-| `getBlockTypes` | Get list of available block types |
-| `getPlayerPosition` | Get player position, rotation, and world |
-| `getWorldInfo` | Get world information and properties |
-| `sendChatMessage` | Send chat message to specific player |
-| `kickPlayer` | Kick player from server |
-| `getPlayerInventory` | Get player inventory contents |
+| Permission | Description | Tools Using This Permission |
+|---------|-------------|---------------------------|
+| `listPlayers` | List all connected players | `list_players` |
+| `getServerInfo` | Get server information and status | `get_server_info` |
+| `executeCommand` | Execute server commands | `execute_command`, `give_item` |
+| `broadcastMessage` | Send messages to all players | `broadcast_message` |
+| `getLogs` | Retrieve and filter server logs | `get_logs` |
+| `setBlock` | Place blocks at coordinates | `set_block`, `set_blocks_batch`, `flatten_terrain` |
+| `getBlockTypes` | Get list of available block types | `get_block_types`, `get_building_guide` |
+| `listBlocks` | Search and filter blocks with categorization | `list_blocks` |
+| `getPlayerPosition` | Get player position, rotation, and world | `get_player_position` |
+| `getWorldInfo` | Get world information and properties | `get_world_info` |
+| `sendChatMessage` | Send chat message to specific player | `send_chat_message` |
+
+**Additional Settings:**
+- **`maxBlocksBatch`** (int, default: 1000) - Maximum blocks per `set_blocks_batch` call
 
 **Permission Structure:**
 - **`features.admins`** - Features available to admin token holders
@@ -267,6 +274,130 @@ Gets information about the server including name, version, and uptime.
 }
 ```
 
+#### `list_blocks`
+Lists all available blocks with smart categorization and caching. Perfect for discovering item IDs for building or giving items.
+
+**Parameters:**
+- `limit` (int, optional): Maximum number of blocks to return
+- `search` (string, optional): Search term to filter blocks by name (case-insensitive)
+- `category` (string, optional): Filter by category (building, decoration, nature, ore, stone, wood, metal, glass, food, tool, weapon, misc)
+
+**Example Request - Search for stones:**
+```json
+{
+  "search": "stone",
+  "limit": 10
+}
+```
+
+**Example Request - Get all building blocks:**
+```json
+{
+  "category": "building",
+  "limit": 50
+}
+```
+
+**Response:**
+```json
+{
+  "total": 1234,
+  "returned": 10,
+  "blocks": [
+    {
+      "name": "hytale:stone_brick",
+      "id": 42,
+      "category": "building"
+    },
+    {
+      "name": "hytale:sandstone",
+      "id": 87,
+      "category": "stone"
+    }
+  ],
+  "categoryStats": {
+    "building": 250,
+    "stone": 180,
+    "wood": 120,
+    "nature": 300,
+    "decoration": 95,
+    "misc": 289
+  },
+  "searchTerm": "stone"
+}
+```
+
+#### `give_item`
+Gives an item to a player using the `/give` command.
+
+**Parameters:**
+- `player` (string): Player name to give the item to
+- `itemId` (string): Item ID (use `list_blocks` to find IDs)
+- `quantity` (int, optional): Quantity to give (default: 1)
+
+**Example Request:**
+```json
+{
+  "player": "Michel",
+  "itemId": "Ingredient_Stick",
+  "quantity": 10
+}
+```
+
+**Response:**
+```json
+{
+  "player": "Michel",
+  "itemId": "Ingredient_Stick",
+  "quantity": 10,
+  "command": "give Michel Ingredient_Stick --quantity=10",
+  "status": "executed"
+}
+```
+
+#### `flatten_terrain`
+Flattens a rectangular terrain area at a specific height, perfect for building foundations. Fills below with blocks and clears above with air.
+
+**Parameters:**
+- `world` (string): World UUID
+- `x1`, `z1` (int): First corner coordinates
+- `x2`, `z2` (int): Second corner coordinates
+- `y` (int): Height level to flatten at
+- `fillBlock` (string, optional): Block type to fill below surface (default: "hytale:dirt")
+- `maxHeight` (int, optional): Maximum height to clear above (default: y+10)
+
+**Example Request - Create a 50x50 stone platform:**
+```json
+{
+  "world": "world-uuid-here",
+  "x1": 100,
+  "z1": 100,
+  "x2": 150,
+  "z2": 150,
+  "y": 64,
+  "fillBlock": "hytale:stone"
+}
+```
+
+**Response:**
+```json
+{
+  "area": 2601,
+  "minX": 100,
+  "maxX": 150,
+  "minZ": 100,
+  "maxZ": 150,
+  "flattenY": 64,
+  "maxHeight": 74,
+  "fillBlock": "hytale:stone",
+  "blocksPlaced": 166464,
+  "blocksCleared": 26010,
+  "totalBlocks": 192474,
+  "durationMs": 1250,
+  "status": "success"
+}
+```
+
 #### `execute_command`
 Executes a server command.
 
@@ -338,7 +469,7 @@ Retrieves server logs with optional filtering.
 ```
 
 #### `set_blocks_batch`
-Sets multiple blocks at specified world coordinates in a single request (max 100 blocks).
+Sets multiple blocks at specified world coordinates in a single request (configurable limit, default: 1000 blocks).
 
 **Parameters:**
 - `blocks` (array): Array of block objects, each with x, y, z, blockType
@@ -369,21 +500,6 @@ Sets multiple blocks at specified world coordinates in a single request (max 100
     {"x": 10, "y": 64, "z": 10, "blockType": "Rock_Sandstone_Brick", "status": "success"},
     {"x": 11, "y": 64, "z": 10, "blockType": "Rock_Sandstone_Brick", "status": "success"},
     {"x": 10, "y": 64, "z": 11, "blockType": "Rock_Sandstone_Brick", "status": "success"}
-  ]
-}
-```
-
-#### `get_block_types`
-Gets a list of all available block types that can be used in building.
-All available items can be found here: https://www.hytaleitemids.com
-
-**Response:**
-```json
-{
-  "blocks": [
-    {"name": "Armor_Onyxium_Head", "id": 104},
-    {"name": "Rock_Stone_Brick", "id": 145},
-    {"name": "Armor_Onyxium_Head", "id": 200}
   ]
 }
 ```
@@ -454,54 +570,6 @@ Sends a chat message to a specific player.
 {
   "message": "Welcome to the server!",
   "status": "sent"
-}
-```
-
-#### `kick_player`
-Kicks a player from the server.
-
-**Parameters:**
-- `player` (string): Player name to kick
-- `reason` (string, optional): Reason for the kick
-
-**Request:**
-```json
-{
-  "player": "Michel",
-  "reason": "AFK for too long"
-}
-```
-
-**Response:**
-```json
-{
-  "player": "Michel",
-  "reason": "AFK for too long",
-  "status": "kicked"
-}
-```
-
-#### `get_player_inventory`
-Gets the inventory contents of a specific player.
-
-**Parameters:**
-- `player` (string): Player name
-
-**Request:**
-```json
-{
-  "player": "Michel"
-}
-```
-
-**Response:**
-```json
-{
-  "player": "Michel",
-  "count": 36,
-  "items": [
-    {"name": "Rock_Sandstone_Brick", "count": 64}
-  ]
 }
 ```
 
@@ -692,7 +760,7 @@ A: Minimal. The plugin only processes requests when AI assistants make calls. Ba
 A: Yes! The plugin has an extensible architecture. See the [Extending](#extending-with-custom-features) section for details.
 
 **Q: Is there a limit to how many blocks can be placed at once?**
-A: Yes, the `set_blocks_batch` operation has a maximum of 100 blocks per request to prevent server overload.
+A: Yes, the `set_blocks_batch` operation has a configurable maximum (default: 1000 blocks) per request to prevent server overload. The `flatten_terrain` tool has a higher limit for large-scale terrain operations.
 
 **Q: Can players have different permission levels?**
 A: Yes. You can configure separate permission sets for admin tokens and player tokens, giving you fine-grained control.

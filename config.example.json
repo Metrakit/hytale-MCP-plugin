@@ -10,36 +10,31 @@
   },
   "features": {
     "players": {
-      "listPlayers": true,
-      "getServerInfo": true,
+      "listPlayers": false,
       "executeCommand": false,
-      "getServerStats": true,
       "broadcastMessage": false,
       "setBlock": false,
-      "setBlocksBatch": false,
-      "getBlockTypes": true,
-      "getPlayerPosition": true,
-      "getWorldInfo": true,
-      "sendChatMessage": true,
-      "kickPlayer": false,
-      "getPlayerInventory": false,
-      "getLogs": false
+      "getPlayerPosition": false,
+      "getLogs": false,
+      "sendChatMessage": false,
+      "getBlockTypes": false,
+      "listBlocks": false,
+      "getWorldInfo": false,
+      "getServerInfo": false
     },
     "admins": {
       "listPlayers": true,
-      "getServerInfo": true,
       "executeCommand": true,
-      "getServerStats": true,
       "broadcastMessage": true,
       "setBlock": true,
-      "setBlocksBatch": true,
-      "getBlockTypes": true,
       "getPlayerPosition": true,
-      "getWorldInfo": true,
+      "getLogs": true,
       "sendChatMessage": true,
-      "kickPlayer": true,
-      "getPlayerInventory": true,
-      "getLogs": true
-    }
+      "getBlockTypes": true,
+      "listBlocks": true,
+      "getWorldInfo": true,
+      "getServerInfo": true
+    },
+    "maxBlocksBatch": 1000
   }
 }
