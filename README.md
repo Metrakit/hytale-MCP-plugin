@@ -189,6 +189,22 @@ Configure feature availability for each permission level:
 - **`features.admins`** - Features available to admin token holders
 - **`features.players`** - Features available to player token holders
 
+### Disabling HTTPS (HTTP Connection)
+
+By default, the Nitrado WebServer plugin uses HTTPS. If you need to connect via HTTP, you can disable TLS in the WebServer plugin configuration.
+
+**Location:** `mods/Nitrado_WebServer/config.json`
+
+Add or modify the `Tls` section:
+
+```json
+{
+  "Tls": {
+    "Insecure": true
+  }
+}
+```
+
 ## Usage
 
 ### Connecting AI Clients
