@@ -43,7 +43,7 @@ public class McpServlet extends HttpServlet {
     }
 
     public void shutdown() {
-        logger.atInfo().log("MCP servlet shutdown");
+        logger.atInfo().log("Shutting down MCP servlet - closing all active connections");
     }
 
     @Override
@@ -52,6 +52,8 @@ public class McpServlet extends HttpServlet {
 
         McpAuthManager.AuthLevel authLevel = authManager.authenticate(req);
         if (authLevel == McpAuthManager.AuthLevel.NONE) {
+            String clientIp = getClientIp(req);
+            logger.atWarning().log("Unauthorized connection attempt from " + clientIp);
             sendUnauthorized(resp);
             return;
         }
@@ -93,7 +95,7 @@ public class McpServlet extends HttpServlet {
             .build();
 
         initialized = true;
-        logger.atInfo().log("MCP server initialized");
+        logger.atInfo().log("MCP server initialized and ready to accept connections");
     }
 
     private void handleStreamable(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -108,6 +110,18 @@ public class McpServlet extends HttpServlet {
                 resp.getWriter().flush();
                 return;
             }
+
+            if (meansMethod(req, "GET")) {
+                String acceptHeader = req.getHeader("Accept");
+                boolean isSseConnection = acceptHeader != null && acceptHeader.contains("text/event-stream");
+
+                if (isSseConnection) {
+                    String clientIp = getClientIp(req);
+                    McpAuthManager.AuthLevel authLevel = authManager.authenticate(req);
+                    logger.atInfo().log("New SSE connection from " + clientIp + " (auth: " + authLevel + ")");
+                }
+            }
+
             streamableProvider.service(req, resp);
         } else {
             resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
@@ -144,6 +158,20 @@ public class McpServlet extends HttpServlet {
 
     private static boolean meansMethod(HttpServletRequest req, String method) {
         return req.getMethod().equalsIgnoreCase(method);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            return xForwardedFor.split(",")[0].trim();
+        }
+
+        String xRealIp = request.getHeader("X-Real-IP");
+        if (xRealIp != null && !xRealIp.isEmpty()) {
+            return xRealIp;
+        }
+
+        return request.getRemoteAddr();
     }
 
     private void sendUnauthorized(HttpServletResponse resp) throws IOException {
