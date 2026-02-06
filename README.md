@@ -243,6 +243,9 @@ For OpenCode or other MCP clients, add this configuration:
 
 Places a single block at specified coordinates.
 
+**Example Prompt:**
+> "Place a sandstone brick at coordinates x:10, y:64, z:10"
+
 **Parameters:**
 - `x` (int): X coordinate
 - `y` (int): Y coordinate
@@ -266,6 +269,10 @@ Places a single block at specified coordinates.
 #### `list_players`
 Lists all currently connected players on the server.
 
+**Example Prompt:**
+> "Who is currently online on the server?"
+> "List all connected players"
+
 **Response:**
 ```json
 {
@@ -282,6 +289,10 @@ Lists all currently connected players on the server.
 #### `get_server_info`
 Gets information about the server including name, version, and uptime.
 
+**Example Prompt:**
+> "What's the server status?"
+> "Show me server information and uptime"
+
 **Response:**
 ```json
 {
@@ -294,6 +305,11 @@ Gets information about the server including name, version, and uptime.
 
 #### `list_blocks`
 Lists all available blocks with smart categorization and caching. Perfect for discovering item IDs for building or giving items.
+
+**Example Prompt:**
+> "Show me all stone blocks"
+> "Find building blocks that contain 'brick'"
+> "List 20 decoration blocks"
 
 **Parameters:**
 - `limit` (int, optional): Maximum number of blocks to return
@@ -348,6 +364,10 @@ Lists all available blocks with smart categorization and caching. Perfect for di
 #### `give_item`
 Gives an item to a player using the `/give` command.
 
+**Example Prompt:**
+> "Give Michel 10 sticks"
+> "Give 64 stone bricks to PlayerName"
+
 **Parameters:**
 - `player` (string): Player name to give the item to
 - `itemId` (string): Item ID (use `list_blocks` to find IDs)
@@ -375,6 +395,11 @@ Gives an item to a player using the `/give` command.
 
 #### `flatten_terrain`
 Flattens a rectangular terrain area at a specific height, perfect for building foundations. Fills below with blocks and clears above with air.
+
+**Example Prompt:**
+> "Flatten a 50x50 area at my location for building a castle"
+> "Create a stone platform 100 blocks wide at height 64"
+> "Prepare the terrain for a large building, make it flat"
 
 **Parameters:**
 - `world` (string): World UUID
@@ -419,6 +444,11 @@ Flattens a rectangular terrain area at a specific height, perfect for building f
 #### `execute_command`
 Executes a server command.
 
+**Example Prompt:**
+> "Make Michel an operator"
+> "Execute the command 'weather clear'"
+> "Set the time to day"
+
 **Parameters:**
 ```json
 {
@@ -437,6 +467,10 @@ Executes a server command.
 #### `broadcast_message`
 Broadcasts a message to all connected players.
 
+**Example Prompt:**
+> "Announce to everyone that the server will restart in 5 minutes"
+> "Broadcast a welcome message to all players"
+
 **Parameters:**
 ```json
 {
@@ -454,6 +488,11 @@ Broadcasts a message to all connected players.
 
 #### `get_logs`
 Retrieves server logs with optional filtering.
+
+**Example Prompt:**
+> "Show me the last 50 error logs"
+> "Get server logs from yesterday"
+> "What are the recent warnings in the logs?"
 
 **Parameters:**
 - `lines` (int, optional): Number of lines to retrieve (default: 100, max: 1000)
@@ -488,6 +527,12 @@ Retrieves server logs with optional filtering.
 
 #### `set_blocks_batch`
 Sets multiple blocks at specified world coordinates in a single request (configurable limit, default: 1000 blocks).
+
+**Example Prompt:**
+> "Build a 10x10 stone wall at my location"
+> "Create a house at coordinates x:100, y:64, z:200"
+> "Build an Eiffel Tower replica at my position"
+> "Construct a small castle near me"
 
 **Parameters:**
 - `blocks` (array): Array of block objects, each with x, y, z, blockType
@@ -525,6 +570,11 @@ Sets multiple blocks at specified world coordinates in a single request (configu
 #### `get_player_position`
 Gets the current position (x, y, z) and rotation (yaw, pitch) of a specific player.
 
+**Example Prompt:**
+> "Where is Michel located?"
+> "Get my current position"
+> "What are the coordinates of PlayerName?"
+
 **Parameters:**
 - `player` (string): Player name
 
@@ -554,6 +604,11 @@ Gets the current position (x, y, z) and rotation (yaw, pitch) of a specific play
 #### `get_world_info`
 Gets information about a world including name, seed, and dimension.
 
+**Example Prompt:**
+> "What's the world seed?"
+> "Show me information about the current world"
+> "Where is the spawn point?"
+
 **Response:**
 ```json
 {
@@ -570,6 +625,11 @@ Gets information about a world including name, seed, and dimension.
 
 #### `send_chat_message`
 Sends a chat message to a specific player.
+
+**Example Prompt:**
+> "Send Michel a welcome message"
+> "Tell PlayerName that their building looks great"
+> "Message the admin about the issue"
 
 **Parameters:**
 - `player` (string): Target player name
