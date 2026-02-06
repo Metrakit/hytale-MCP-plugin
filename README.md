@@ -4,8 +4,10 @@
 
 Connect AI assistants like OpenCode, Claude, ChatGPT, and Gemini directly to your Hytale server
 
+![Preview](./doc/preview.jpg)
+
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/Metrakit/hytale-MCP-plugin/releases)
+[![Version](https://img.shields.io/badge/version-0.2.0-green.svg)](https://github.com/Metrakit/hytale-MCP-plugin/releases)
 [![Java](https://img.shields.io/badge/java-25-orange.svg)](https://www.oracle.com/java/)
 [![MCP](https://img.shields.io/badge/MCP-Protocol-purple.svg)](https://modelcontextprotocol.io)
 
